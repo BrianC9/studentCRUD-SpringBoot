@@ -1,5 +1,6 @@
 package com.example.studentsapi.services;
 
+import com.example.studentsapi.exception.EmailAlreadyTakenException;
 import com.example.studentsapi.models.Student;
 import com.example.studentsapi.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class StudentService {
     }
 
     public ResponseEntity<Student> createStudent(Student student) {
-        
+
         Optional<Student> checkedEmail = studentRepository.findStudentByEmail(student.getEmail());
         if (checkedEmail.isPresent()) {
-            throw new IllegalStateException("Email already in use");
+            throw new EmailAlreadyTakenException("Email already in use");
         }
         Student result = studentRepository.save(student);
         return ResponseEntity.ok(student);
@@ -55,7 +56,7 @@ public class StudentService {
             if (email != null && email.length() > 0 && !email.equalsIgnoreCase(resultStudent.getEmail())) {
                 Optional<Student> checkedEmail = studentRepository.findStudentByEmail(email);
                 if (checkedEmail.isPresent()) {
-                    throw new IllegalStateException("Email already in use");
+                    throw new EmailAlreadyTakenException("Email already in use");
                 }
                 resultStudent.setEmail(email);
             }
