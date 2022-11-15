@@ -50,7 +50,7 @@ public class StudentService {
 
     public ResponseEntity<Student> updateStudent(Long id, String name, String email) {
         if (!studentRepository.existsById(id)) return ResponseEntity.notFound().build();
-        Student resultStudent = studentRepository.findById(id).orElseThrow(() -> new IllegalStateException("Studen with id " + id + " does not exists"));
+        Student resultStudent = studentRepository.findById(id).orElseThrow(() -> new IllegalStateException("Student with id " + id + " does not exists"));
         if (name != null && name.length() > 0 && !name.equalsIgnoreCase(resultStudent.getName())) {
             resultStudent.setName(name);
             if (email != null && email.length() > 0 && !email.equalsIgnoreCase(resultStudent.getEmail())) {
