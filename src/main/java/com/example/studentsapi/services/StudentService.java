@@ -21,7 +21,6 @@ public class StudentService {
     }
 
     public ResponseEntity<List<Student>> getAll() {
-        if (studentRepository.count() == 0) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(studentRepository.findAll());
     }
 
@@ -34,9 +33,8 @@ public class StudentService {
 
     public ResponseEntity<Student> createStudent(Student student) {
 
-        Optional<Student> checkedEmail = studentRepository.findStudentByEmail(student.getEmail());
-        if (checkedEmail.isPresent()) {
-            throw new EmailAlreadyTakenException("Email already in use");
+        if (studentRepository.findStudentByEmail(student.getEmail())) {
+            throw new EmailAlreadyTakenException("Email already in use: " + student.getEmail());
         }
         Student result = studentRepository.save(student);
         return ResponseEntity.ok(student);
@@ -54,9 +52,9 @@ public class StudentService {
         if (name != null && name.length() > 0 && !name.equalsIgnoreCase(resultStudent.getName())) {
             resultStudent.setName(name);
             if (email != null && email.length() > 0 && !email.equalsIgnoreCase(resultStudent.getEmail())) {
-                Optional<Student> checkedEmail = studentRepository.findStudentByEmail(email);
-                if (checkedEmail.isPresent()) {
-                    throw new EmailAlreadyTakenException("Email already in use");
+
+                if (studentRepository.findStudentByEmail(email)) {
+                    throw new EmailAlreadyTakenException("Email already in use: " + email);
                 }
                 resultStudent.setEmail(email);
             }

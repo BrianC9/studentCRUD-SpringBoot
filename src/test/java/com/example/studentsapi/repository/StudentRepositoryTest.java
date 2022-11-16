@@ -47,7 +47,7 @@ class StudentRepositoryTest {
         Student student = new Student("Kevin", LocalDate.of(2001, 03, 21), "kevin@gmail.com");
         repoTest.save(student);
         // When
-        boolean expectedStudent = repoTest.findStudentByEmail(student.getEmail()).isPresent() ? true : false;
+        boolean expectedStudent = repoTest.findStudentByEmail(student.getEmail());
         // Then
         assertThat(expectedStudent).isTrue();
     }
@@ -58,7 +58,7 @@ class StudentRepositoryTest {
         // Given
         String email = "kevin@gmail.com";
         // When
-        boolean expectedStudent = repoTest.findStudentByEmail(email).isPresent() ? true : false;
+        boolean expectedStudent = repoTest.findStudentByEmail(email);
         // Then
         assertThat(expectedStudent).isFalse();
     }
